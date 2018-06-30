@@ -1,3 +1,13 @@
+/*not complete and needs to be converted to python
+What this will do:
+ 1. Given the location of the images and the number of sections
+ 2. Given the threshold and the color range
+ 3. It will go through each sections and if red mark is detected (threshold = # of red pixels to pass) it will be put into the folder problem
+ 4. If it is not detected it will be put into the folder safe
+ */
+
+
+
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <string>
