@@ -1,27 +1,40 @@
+#!/usr/bin/python
 import cv2
 import numpy as mp
 
 def ftest( img_url ):
-  img = cv2.imread(img_url)
+  base = cv2.imread(img_url)
+  img = cv2.resize(base, (410, 308))
+  
   error_pixel_detected = 0
   h, w, channels = img.shape
   
-  threshold = int((h * w) / 10)
+  threshold = int((h * w) / 15)
   
-  blr, bhr = [1, 100]
-  glr, ghr = [-1, 100]
-  rlr, rhr = [120, 260]
+  blr, bhr = [1, 150]
+  glr, ghr = [1, 150]
+  rlr, rhr = [150, 255]
   
-  for x in range(1, w):
-    for y in range(1, h):
-      red, green, blue = img[x, y]
+  for x in range(0, w-1):
+    for y in range(0, h-1):
+      red, green, blue = img[y, x]
       
       if blr <= blue <= bhr:
         if glr <= green <= ghr:
           if rlr <= red <= rhr:
             error_pixel_detected += 1
-            
+       
   if error_pixel_detected > threshold:
     return True
   else:
     return False
+
+numb_of_images = 16
+def_image_location = '/home/pi/Desktop/images/panel'
+safe_location = '/home/pi/Desktop/result/safe/panel'
+problem_location = '/home/pi/Desktop/result/problem/panel'
+for x in range(0,numb_of_images):
+    if ftest(def_image_location+str(x)+'.jpg'):
+        cv2.imwrite(problem_location+str(x)+'.jpg',cv2.imread(def_image_location+str(x)+'.jpg'))
+    else:
+        cv2.imwrite(safe_location+str(x)+'.jpg',cv2.imread(def_image_location+str(x)+'.jpg'))
