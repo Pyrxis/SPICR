@@ -1,6 +1,8 @@
 #!/usr/bin/python
 import cv2
 import numpy as mp
+import shutil
+import os 
 
 def ftest( img_url ):
   base = cv2.imread(img_url)
@@ -9,7 +11,8 @@ def ftest( img_url ):
   error_pixel_detected = 0
   h, w, channels = img.shape
   
-  threshold = int((h * w) / 15)
+  #threshold = int((h * w) / 15)
+  threshold = 30
   
   blr, bhr = [1, 150]
   glr, ghr = [1, 150]
@@ -29,6 +32,12 @@ def ftest( img_url ):
   else:
     return False
 
+shutil.rmtree('/home/pi/Desktop/result/safe')
+shutil.rmtree('/home/pi/Desktop/result/problem')
+newpath = r'/home/pi/Desktop/result/safe'
+newpath2 = r'/home/pi/Desktop/result/problem'
+os.makedirs(newpath)
+os.makedirs(newpath2)              
 numb_of_images = 16
 def_image_location = '/home/pi/Desktop/images/panel'
 safe_location = '/home/pi/Desktop/result/safe/panel'
