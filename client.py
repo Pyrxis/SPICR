@@ -1,22 +1,33 @@
-#!/usr/bin/python           # This is client.py file
 import io
-import socket               # Import socket module
+import socket
+import os
 import sys
-s = socket.socket()         # Create a socket object
-num = 1
-host = socket.gethostname() # Get local machine name
-port = 12345                # Reserve a port for your service.
 
+
+s = socket.socket()
+num = 0
+host = socket.gethostname()
+port = 12345
+newpath = r'C:\Users\hajun_dg9ntlr\Desktop\result'
 s.connect((host, port))
-#fh = open("imageToSave.png", "wb")
-#fh.write(s.recv(400000000).decode('utf-8'))
-#fh.close()
+
+try:     #tries to make folder result, if it can't (exists) then pass
+    os.makedirs(newpath)
+except:
+    pass
+
+numfiles = len([t for t in os.listdir('./Picture')]) #this /Picture is dir that contains initial images
+
+while (num <= numfiles-1):
+    x= s.recv(9999999979)
+    f = open("result\\newfire"+str(num)+".png", "wb")
+    bytearr = bytearray(x)
+    f.write(bytearr)
+    num+=1
 
 
-x= s.recv(40000000000)
-name = "newfire"+str(num)+".png"
-f = open("newfire1.png", "wb")
-f.write(bytearray(x))
+
+
 f.close
 
-s.close                     # Close the socket when done
+s.close
