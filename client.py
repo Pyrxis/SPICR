@@ -1,33 +1,53 @@
+#basic folder/img information:
+
+#Original images are in Desktop/Pictures
+#Cloned images will be saved in Desktop/result
+#10 images in /Pictures numbered fire1.png ~ fire10.png
+#10 images will be in /result numbered newfire0.png ~ newfire9.png
+
+#what needs to be fixed
+
+#currently, it creates a "result" folder with 10 images labled "newfire0" ~ "newfire9", however,
+#only newfire0 is "loaded" meaning it is the only openable img that is cloned from the first picture
+#in the original /Pictures folder. The others are just image files without any data
+
+
 import io
 import socket
 import os
 import sys
 
 
+num=1
+done = False
 s = socket.socket()
-num = 0
+a = b""
 host = socket.gethostname()
 port = 12345
-newpath = r'C:\Users\hajun_dg9ntlr\Desktop\result'
-s.connect((host, port))
+s.bind((host, port))
 
-try:     #tries to make folder result, if it can't (exists) then pass
-    os.makedirs(newpath)
-except:
-    pass
 
-numfiles = len([t for t in os.listdir('./Picture')]) #this /Picture is dir that contains initial images
-
-while (num <= numfiles-1):
-    x= s.recv(9999999979)
-    f = open("result\\newfire"+str(num)+".png", "wb")
-    bytearr = bytearray(x)
-    f.write(bytearr)
-    num+=1
+def imagetobyte(imagename):     #This func takes in original img and returns bytearray of it
+   with open(imagename, "rb") as imageFilex:
+      f = imageFilex.read()
+      b = bytearray(f)
+      return b
 
 
 
+s.listen(5)                
 
-f.close
+while True:
+   c, addr= s.accept() 
+   print ('Got connection from', addr)
 
-s.close
+
+   numfiles = len([t for t in os.listdir('./Picture')]) #this /Picture is dir that contains initial images
+
+   while(num<=numfiles):
+      a = b"" + (imagetobyte('.\\Picture\\fire'+str(num)+'.png'))
+      num+=1
+      c.send(a)
+   
+   
+   c.close()  
