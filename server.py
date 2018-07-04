@@ -46,7 +46,7 @@ while True:
    numfiles = len([t for t in os.listdir('./Picture')]) #this /Picture is dir that contains initial images
 
    while(num<=numfiles):
-      a += (imagetobyte('.\\Picture\\fire'+str(num)+'.png'))
+      a = b"" + (imagetobyte('.\\Picture\\fire'+str(num)+'.png'))
       num+=1
       
    c.send(bytes(a)) # if i put this line inside the while loop, none of the images get loaded. 
