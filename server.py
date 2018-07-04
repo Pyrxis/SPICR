@@ -13,7 +13,7 @@
 
 
 import io
-import socket
+import socket,pickle
 import os
 import sys
 
@@ -21,7 +21,7 @@ import sys
 num=1
 done = False
 s = socket.socket()
-a = b""
+a = []
 host = socket.gethostname()
 port = 12345
 s.bind((host, port))
@@ -45,9 +45,11 @@ while True:
    numfiles = len([t for t in os.listdir('./Picture')]) #this /Picture is dir that contains initial images
 
    while(num<=numfiles):
-      a = b"" + (imagetobyte('.\\Picture\\fire'+str(num)+'.png'))
+      a.append( b"" + (imagetobyte('.\\Picture\\fire'+str(num)+'.png')))
       num+=1
-      c.send(a)
+
+   print(type(a))
+   c.sendall(pickle.dumps(a))
    
    
-   c.close()  
+   c.close()
