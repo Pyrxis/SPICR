@@ -13,7 +13,7 @@
 
 
 import io
-import socket               
+import socket
 import os
 import sys
 
@@ -28,8 +28,8 @@ s.bind((host, port))
 
 
 def imagetobyte(imagename):     #This func takes in original img and returns bytearray of it
-   with open(imagename, "rb") as imageFile:
-      f = imageFile.read()
+   with open(imagename, "rb") as imageFilex:
+      f = imageFilex.read()
       b = bytearray(f)
       return b
 
@@ -38,18 +38,16 @@ def imagetobyte(imagename):     #This func takes in original img and returns byt
 s.listen(5)                
 
 while True:
-   c, addr= s.accept()
-
-   
-   
+   c, addr= s.accept() 
    print ('Got connection from', addr)
+
+
    numfiles = len([t for t in os.listdir('./Picture')]) #this /Picture is dir that contains initial images
 
    while(num<=numfiles):
       a = b"" + (imagetobyte('.\\Picture\\fire'+str(num)+'.png'))
       num+=1
-      
-   c.send(bytes(a)) # if i put this line inside the while loop, none of the images get loaded. 
-      
+      c.send(a)
    
-   c.close()
+   
+   c.close()  
