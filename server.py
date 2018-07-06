@@ -1,3 +1,4 @@
+
 #basic folder/img information:
 
 #Original images are in Desktop/Pictures
@@ -16,12 +17,13 @@ import io
 import socket,pickle
 import os
 import sys
+import re
 
 
-num=1
+
 done = False
 s = socket.socket()
-a = []
+
 host = socket.gethostname()
 port = 12345
 s.bind((host, port))
@@ -41,12 +43,33 @@ while True:
    c, addr= s.accept() 
    print ('Got connection from', addr)
 
+   file_no_safe = []
+   file_no_problem = []
+   regex = re.compile(r'\d+')
 
-   numfiles = len([t for t in os.listdir('./Picture')]) #this /Picture is dir that contains initial images
+   for t in os.listdir('./result/safe'):
+      x = int(regex.findall(t)[0])
+      file_no_safe.append(x)
+   for t in os.listdir('./result/problem'):
+      x = int(regex.findall(t)[0])
+      file_no_problem.append(x)
 
-   while(num<=numfiles):
-      a.append( b"" + (imagetobyte('.\\Picture\\fire'+str(num)+'.png')))
-      num+=1
+
+   
+   a = []
+   a.append(file_no_safe)
+   a.append(file_no_problem)
+   for i in file_no_safe:
+      if(os.path.isfile('./result/safe/panel'+str(i)+'.png')):
+ 
+         a.append( b"" + (imagetobyte('./result/safe/panel'+str(i)+'.png')))
+      else:
+         pass
+   for i in file_no_problem:
+      if(os.path.isfile('./result/problem/panel'+str(i)+'.png')):
+         a.append( b"" + (imagetobyte('./result/problem/panel'+str(i)+'.png')))
+      else:
+         pass
 
    print(type(a))
    c.sendall(pickle.dumps(a))
